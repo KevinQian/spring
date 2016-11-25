@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    /*这里不使用spring boot自带的console和file appender,原因是配置在application.properties
+    里面的logging.path和logging.file两个属性无法同时配置使用*/
+    <!--<include resource="org/springframework/boot/logging/logback/base.xml" />-->
+    <!-- 控制台日志输出配置-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>%-23date %thread [%X{requestMethod}-%X{requestURI}] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!--文件日志输出配置-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/Users/kevin/log/spring-boot-demo.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>%-23date %X{requestId} %X{requestMethod}-%X{requestURI} %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
